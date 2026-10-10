@@ -8,7 +8,7 @@
 [![Open Source? Yes!](https://badgen.net/badge/Open%20Source%20%3F/Yes%21/blue?icon=github)](./)
 [![MIT license](https://shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 
-# NGINX JAVA 21 MAVEN + POSTGRESQL 18+ + Elasticsearch 9+
+# NGINX JAVA 21 MAVEN + POSTGRESQL 18+ + ELASTICSEARCH 9+
 <br>
 
 This repository serves as a multi-engine containerized infrastructure boilerplate designed to streamline local development and remote services for back-end or front-end applications. It provides a set of pre-configured, loosely coupled platform services optimized to work interchangeably with either Docker or Podman.
