@@ -1,0 +1,16 @@
+services:
+
+  elasticsearch:
+    ports:
+      - ${COMPOSE_HOST}:${COMPOSE_PORT}:9200
+    networks:
+      net: {}
+
+networks:
+  net:
+    driver: bridge
+    external: true
+    name: ${COMPOSE_LEAD}-${COMPOSE_CNET}
+  default:
+    external: true
+    name: ${COMPOSE_LEAD}-${COMPOSE_CNET}

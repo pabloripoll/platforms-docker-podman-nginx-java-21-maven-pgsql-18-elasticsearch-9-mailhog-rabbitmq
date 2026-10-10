@@ -1,0 +1,7 @@
+# docker-compose.public.yml - standalone, world accessible
+services:
+
+  mailer:
+    ports:
+      - ${COMPOSE_PROJECT_PORT:-1025}:1025      # SMTP port — send your app mails here
+      - ${COMPOSE_PROJECT_APP_PORT:-8025}:8025  # Web UI + API

@@ -1,0 +1,22 @@
+services:
+
+  mailer:
+    image: ${COMPOSE_PROJECT_IMGK}
+    pull_policy: never
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: "${COMPOSE_PROJECT_LEAD}-${COMPOSE_PROJECT_NAME}"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: ${COMPOSE_PROJECT_CPUS}
+          memory: ${COMPOSE_PROJECT_MEMO} # On Docker Swarm, move resource limits into 'deploy.resources.limits'
+    environment:
+      - MH_SMTP_BIND_ADDR=0.0.0.0:1025
+      - MH_API_BIND_ADDR=0.0.0.0:8025
+    command: ["mailhog", "-smtp-bind-addr=0.0.0.0:1025", "-api-bind-addr=0.0.0.0:8025"]
+    volumes:
+      - .${COMPOSE_PROJECT_DATA}:/var/lib/mailhog/   # NOTE: MailHog stores messages in memory by default; this dir is present if you add a custom storage backend
+      - .${COMPOSE_PROJECT_LOGS}:/var/log/mailhog

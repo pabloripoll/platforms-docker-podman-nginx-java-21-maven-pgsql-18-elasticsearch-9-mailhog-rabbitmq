@@ -1,0 +1,8 @@
+# .gitignore custom settings
+/Dockerfile
+/config/java/conf.d/*
+!/config/java/conf.d/.gitkeep
+/config/nginx/conf.d/*
+!/config/nginx/conf.d/.gitkeep
+/config/supervisor/conf.d/*
+!/config/supervisor/conf.d/.gitkeep

@@ -1,0 +1,75 @@
+FROM eclipse-temurin:21-jdk-oraclelinux9
+
+ARG UID
+ARG GID
+ARG USER
+ARG GROUP
+ENV UID=${UID}
+ENV GID=${GID}
+ENV USER=${USER}
+ENV GROUP=${GROUP}
+
+# Create user/group using standard RHEL/Oracle Linux commands and install sudo
+RUN groupadd -g ${GID} ${GROUP} \
+    && useradd -u ${UID} -g ${GROUP} -m -s /bin/bash ${USER} \
+    && microdnf update -y \
+    && microdnf install -y sudo \
+    && chmod u+s /bin/su \
+    && echo "${USER} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers \
+    && microdnf clean all
+
+# Install main packages, basic tools, EPEL repository (for Supervisor), and Nginx
+RUN microdnf install -y oracle-epel-release-el9 \
+    && microdnf update -y \
+    && microdnf install -y \
+    bash \
+    curl \
+    wget \
+    openssl \
+    libva-devel \
+    # Extras
+    zip \
+    nano \
+    git \
+    # Supervisor
+    supervisor \
+    # Nginx
+    nginx \
+    # Install Java tools
+    maven \
+    # Clean up cache
+    && microdnf clean all
+
+# Configure NGINX
+COPY config/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY config/nginx/conf.d /etc/nginx/conf.d/
+RUN rm -rf /usr/share/nginx/html
+
+# Configure Supervisor
+COPY config/supervisor/supervisord.conf /etc/supervisor/supervisord.conf
+COPY config/supervisor/conf.d/. /etc/supervisor/conf.d/
+# Fix Supervisor runtime directories so they don't crash under a non-root user
+RUN mkdir -p /var/log/supervisor /var/run/supervisor \
+    && chown -R ${USER}:${GROUP} /var/log/supervisor /var/run/supervisor
+
+# Create project root and set it as work directory
+RUN mkdir -p /var/www
+WORKDIR /var/www
+
+# Add application from docker-compose.yml -> volumes: source app.jar
+COPY --chown=${USER}:${GROUP} ../ /var/www
+
+# Remove unused directories
+RUN rm -rf /usr/share/nginx/html
+
+# Make sure files/folders needed by the processes are accessible by the non-root user
+RUN chown -R ${USER}:${GROUP} /var/www /run /var/lib/nginx /var/log/nginx
+
+# Switch to use a non-root user from here on
+USER ${USER}
+
+# Expose HTTP and HTTPS ports
+EXPOSE 80 8080
+
+# Let supervisord start nginx & java
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]

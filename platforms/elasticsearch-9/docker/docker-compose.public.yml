@@ -1,0 +1,13 @@
+# docker-compose.public.yml - standalone, world accessible
+services:
+
+  elasticsearch:
+    ports:
+      - ${COMPOSE_PORT}:9200
+    networks:
+      - net
+
+networks:
+  net:
+    driver: bridge
+    name: ${COMPOSE_LEAD}-${COMPOSE_CNET}

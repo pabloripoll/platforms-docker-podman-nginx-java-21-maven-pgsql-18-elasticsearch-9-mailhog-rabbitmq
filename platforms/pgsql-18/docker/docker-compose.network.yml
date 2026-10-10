@@ -1,0 +1,16 @@
+services:
+
+  pgsql:
+    ports:
+      - ${COMPOSE_PROJECT_HOST}:${COMPOSE_PROJECT_PORT}:5432
+    networks:
+      net: {}
+
+networks:
+  net:
+    driver: bridge
+    external: true
+    name: ${COMPOSE_PROJECT_LEAD}-${COMPOSE_PROJECT_CNET}
+  default:
+    external: true
+    name: ${COMPOSE_PROJECT_LEAD}-${COMPOSE_PROJECT_CNET}

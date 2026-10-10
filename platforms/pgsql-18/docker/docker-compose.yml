@@ -1,0 +1,24 @@
+services:
+
+  pgsql:
+    # From local
+    #image: ${COMPOSE_PROJECT_LEAD}-${COMPOSE_PROJECT_NAME}:${COMPOSE_PROJECT_IMGK}
+    #pull_policy: never
+    #build:
+    #  context: ./
+    #  dockerfile: Dockerfile
+    # From Dockerhub
+    image: postgres:18-alpine3.24
+    #
+    container_name: ${COMPOSE_PROJECT_LEAD}-${COMPOSE_PROJECT_NAME}
+    deploy:
+      resources:
+        limits:
+          cpus: ${COMPOSE_PROJECT_CPUS}
+          memory: ${COMPOSE_PROJECT_MEMO}
+    environment:
+      POSTGRES_DB: ${POSTGRES_DATABASE}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    tty: true
+    restart: unless-stopped

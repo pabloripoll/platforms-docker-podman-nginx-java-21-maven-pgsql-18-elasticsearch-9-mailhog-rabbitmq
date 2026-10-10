@@ -1,0 +1,7 @@
+# docker-compose.public.yml - standalone, world accessible
+services:
+
+  rabbitmq:
+    ports:
+      - ${COMPOSE_PROJECT_PORT}:5672 # AMQP
+      - ${COMPOSE_PROJECT_APP_PORT}:15672 # Management UI

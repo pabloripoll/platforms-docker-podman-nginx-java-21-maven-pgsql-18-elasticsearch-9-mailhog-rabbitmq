@@ -1,0 +1,29 @@
+services:
+
+  elasticsearch:
+    image: ${COMPOSE_LEAD}-${COMPOSE_NAME}:${COMPOSE_IMGK}
+    pull_policy: never
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: ${COMPOSE_LEAD}-${COMPOSE_NAME}
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=true
+      - xpack.security.http.ssl.enabled=${ELASTIC_SSL} # This line allows http://
+      - xpack.security.enrollment.enabled=${ELASTIC_SSL} # This line completely stops auto-SSL behavior
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD:-changeme}
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m -Des.cgroups.hierarchy.override=/
+    deploy:
+      resources:
+        limits:
+          cpus: ${COMPOSE_CPUS}
+          memory: ${COMPOSE_MEMO}
+    #volumes:
+    #  - .${COMPOSE_DATA}:/usr/share/elasticsearch/data
+    #  - .${COMPOSE_LOGS}:/usr/share/elasticsearch/logs
+    restart: unless-stopped
+
+volumes:
+  elasticsearch-data:
+    driver: local

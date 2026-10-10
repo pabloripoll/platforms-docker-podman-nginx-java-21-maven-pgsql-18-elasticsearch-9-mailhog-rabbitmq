@@ -1,0 +1,17 @@
+services:
+
+  rabbitmq:
+    ports:
+      - ${COMPOSE_PROJECT_HOST}::${COMPOSE_PROJECT_PORT}:5672 # AMQP
+      - ${COMPOSE_PROJECT_HOST}::${COMPOSE_PROJECT_APP_PORT}:15672 # Management UI
+    networks:
+      net: {}
+
+networks:
+  net:
+    driver: bridge
+    external: true
+    name: ${COMPOSE_PROJECT_LEAD}-${COMPOSE_PROJECT_CNET}
+  default:
+    external: true
+    name: ${COMPOSE_PROJECT_LEAD}-${COMPOSE_PROJECT_CNET}
