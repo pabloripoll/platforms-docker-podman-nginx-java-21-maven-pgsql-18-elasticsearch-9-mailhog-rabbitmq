@@ -21,7 +21,7 @@ endif
 
 include ../../.env
 
-DOCKER_PLTF="NGINX + JAVA 21"
+DOCKER_PLTF="NGINX + JAVA 21 MAVEN"
 DOCKER_LEAD=$(PROJECT_LEAD)
 DOCKER_CNET=$(PROJECT_CNET)
 DOCKER_HOST=$(PROJECT_HOST)
@@ -29,11 +29,11 @@ DOCKER_IMGK=$(APIREST_IMGK)
 DOCKER_CAAS=$(APIREST_CAAS)
 DOCKER_PORT=$(APIREST_PORT)
 DOCKER_BIND=$(APIREST_BIND)
-DOCKER_CPUS=$(APIREST_CAAS_CPUS)
-DOCKER_MEM=$(APIREST_CAAS_MEM)
-DOCKER_SWAP=$(APIREST_CAAS_SWAP)
-DOCKER_USER=$(APIREST_CAAS_USER)
-DOCKER_GROUP=$(APIREST_CAAS_GROUP)
+DOCKER_CPUS=$(APIREST_CPUS)
+DOCKER_MEMO=$(APIREST_MEMO)
+DOCKER_SWAP=$(APIREST_SWAP)
+DOCKER_USER=$(APIREST_USER)
+DOCKER_GROUP=$(APIREST_GROUP)
 
 ROOT_DIR=$(patsubst %/,%,$(dir $(realpath $(firstword $(MAKEFILE_LIST)))))
 DIR_BASENAME=$(shell basename $(ROOT_DIR))
@@ -82,18 +82,18 @@ env-set: ## sets docker .env file
 ifeq ($(DETECTED_OS), Windows)
 	echo "Recipe do not support for Windows NT at this moment - You have to manually create .env file from ./docker/.env.example";
 else
-	@echo "COMPOSE_PROJECT_LEAD=$(DOCKER_LEAD)" > ./docker/.env
-	@echo "COMPOSE_PROJECT_CNET=$(DOCKER_CNET)" >> ./docker/.env
-	@echo "COMPOSE_PROJECT_IMGK=$(DOCKER_IMGK)" >> ./docker/.env
-	@echo "COMPOSE_PROJECT_NAME=$(DOCKER_CAAS)" >> ./docker/.env
-	@echo "COMPOSE_PROJECT_HOST=$(DOCKER_HOST)" >> ./docker/.env
-	@echo "COMPOSE_PROJECT_PORT=$(DOCKER_PORT)" >> ./docker/.env
-	@echo "COMPOSE_PROJECT_PATH=\"$(DOCKER_BIND)\"" >> ./docker/.env
-	@echo "COMPOSE_PROJECT_CPUS=$(DOCKER_CPUS)" >> ./docker/.env
-	@echo "COMPOSE_PROJECT_MEMO=$(DOCKER_MEMO)" >> ./docker/.env
-	@echo "COMPOSE_PROJECT_SWAP=$(DOCKER_SWAP)" >> ./docker/.env
-	@echo "COMPOSE_PROJECT_USER=$(DOCKER_USER)" >> ./docker/.env
-	@echo "COMPOSE_PROJECT_GROUP=$(DOCKER_GROUP)" >> ./docker/.env
+	@echo "COMPOSE_LEAD=$(DOCKER_LEAD)" > ./docker/.env
+	@echo "COMPOSE_CNET=$(DOCKER_CNET)" >> ./docker/.env
+	@echo "COMPOSE_IMGK=$(DOCKER_IMGK)" >> ./docker/.env
+	@echo "COMPOSE_NAME=$(DOCKER_CAAS)" >> ./docker/.env
+	@echo "COMPOSE_HOST=$(DOCKER_HOST)" >> ./docker/.env
+	@echo "COMPOSE_PORT=$(DOCKER_PORT)" >> ./docker/.env
+	@echo "COMPOSE_PATH=\"$(DOCKER_BIND)\"" >> ./docker/.env
+	@echo "COMPOSE_CPUS=$(DOCKER_CPUS)" >> ./docker/.env
+	@echo "COMPOSE_MEMO=$(DOCKER_MEMO)" >> ./docker/.env
+	@echo "COMPOSE_SWAP=$(DOCKER_SWAP)" >> ./docker/.env
+	@echo "COMPOSE_USER=$(DOCKER_USER)" >> ./docker/.env
+	@echo "COMPOSE_GROUP=$(DOCKER_GROUP)" >> ./docker/.env
 	chmod +x ./docker/config/ownerships.sh
 	./docker/config/ownerships.sh $(DOCKER_USER) $(DOCKER_GROUP)
 	echo ${C_BLU}"$(PROJECT_NAME)"${C_END}" API REST "${C_YEL}$(DOCKER_PLTF)${C_END}" - "${C_YEL}"docker-compose.yml"${C_END}" .env file "${C_GRN}"has been set."${C_END};
